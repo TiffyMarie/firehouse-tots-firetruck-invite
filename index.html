@@ -26,15 +26,17 @@ a{color:var(--red);font-weight:700}
 .wrap{max-width:440px;margin:0 auto;padding:0 16px 48px;position:relative}
 
 /* floating age balloons (page bg) */
-.balloon-layer{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+.balloon-layer{
+  position:absolute;inset:0;pointer-events:none;z-index:3;overflow:visible;
+}
 .balloon{
-  position:absolute;width:54px;height:68px;pointer-events:auto;cursor:pointer;
+  position:absolute;width:46px;height:60px;pointer-events:auto;cursor:pointer;
   border:0;background:transparent;padding:0;-webkit-tap-highlight-color:transparent;
-  animation:floatY 4.5s ease-in-out infinite;
+  animation:floatY 4.5s ease-in-out infinite;z-index:3;
 }
 .balloon .b{
-  width:48px;height:56px;border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
-  margin:0 auto;display:grid;place-items:center;color:#fff;font-weight:900;font-size:20px;
+  width:40px;height:48px;border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
+  margin:0 auto;display:grid;place-items:center;color:#fff;font-weight:900;font-size:17px;
   box-shadow:inset -6px -8px 0 rgba(0,0,0,.08),0 6px 12px rgba(27,42,74,.15);
   position:relative;
 }
@@ -44,7 +46,7 @@ a{color:var(--red);font-weight:700}
 }
 .balloon .string{width:2px;height:28px;background:rgba(27,42,74,.25);margin:4px auto 0;border-radius:2px}
 .balloon.popped{animation:pop .45s ease forwards;pointer-events:none}
-@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes pop{0%{transform:scale(1);opacity:1}40%{transform:scale(1.25);opacity:.9}100%{transform:scale(0);opacity:0}}
 
 /* —— Intro bay —— */
@@ -54,7 +56,7 @@ a{color:var(--red);font-weight:700}
   color:#fff;cursor:pointer;overflow:hidden;
   transition:opacity .6s ease,visibility .6s;
 }
-#intro.open{opacity:0;visibility:hidden;pointer-events:none}
+#intro.open{opacity:0;visibility:hidden;pointer-events:none;display:none}
 #intro .bay{
   width:min(90vw,360px);aspect-ratio:3/4.1;position:relative;
   border:4px solid rgba(255,248,231,.3);border-radius:28px;overflow:hidden;
@@ -127,7 +129,7 @@ a{color:var(--red);font-weight:700}
 .mute-btn[aria-pressed="true"]{background:var(--cream-deep)}
 
 /* hero */
-header.hero{padding:28px 0 4px;text-align:center;position:relative;z-index:2}
+header.hero{padding:28px 0 4px;text-align:center;position:relative;z-index:2;isolation:isolate}
 .brand-pill{
   display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--red);
   font-weight:900;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
@@ -144,9 +146,11 @@ header.hero{padding:28px 0 4px;text-align:center;position:relative;z-index:2}
 
 /* play area: truck + pup */
 .play-area{
-  margin:10px auto 6px;position:relative;width:100%;max-width:340px;height:168px;
-  display:flex;align-items:flex-end;justify-content:center;gap:4px;
+  margin:8px auto 10px;position:relative;width:100%;max-width:340px;min-height:220px;height:220px;
+  display:flex;align-items:flex-end;justify-content:center;gap:4px;z-index:2;
+  overflow:visible;
 }
+.play-area .truck-btn,.play-area .pup-btn{position:relative;z-index:4;}
 .truck-btn,.pup-btn{
   border:0;background:transparent;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;
   position:relative;
@@ -345,7 +349,6 @@ const CONFIG = {
   </div>
 </div>
 
-<div class="balloon-layer" id="balloonLayer" aria-hidden="true"></div>
 <div id="burst" aria-hidden="true"></div>
 
 <main class="wrap" id="invite">
@@ -355,7 +358,8 @@ const CONFIG = {
     <h2 id="headline">Liam is turning <span class="age">4</span></h2>
     <p class="tagline" id="tagline">Join us for a fire truck birthday celebration!</p>
 
-    <div class="play-area">
+    <div class="play-area" id="playArea">
+      <div class="balloon-layer" id="balloonLayer" aria-hidden="true"></div>
       <button type="button" class="truck-btn" id="truckBtn" aria-label="Tap the fire truck for lights and siren">
         <span class="hint">Tap!</span>
         <svg id="truckSvg" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cute fire truck">
@@ -636,15 +640,20 @@ const CONFIG = {
   };
   $("rsvpModeNote").textContent = modeNotes[mode] || modeNotes.mailto;
 
-  // Balloons with age
+  // Balloons confined to play-area (around truck/pup only)
   const colors = ["#D7263D","#7EC8E3","#FFC93C","#FF8FAB","#7BD389","#9B8CFF"];
   const layer = $("balloonLayer");
-  for (let i = 0; i < 6; i++){
+  // positions as % of the 220px scene — stay above truck body, clear of cards
+  const spots = [
+    {l:"8%", t:"2%"}, {l:"28%", t:"0%"}, {l:"48%", t:"4%"},
+    {l:"66%", t:"1%"}, {l:"82%", t:"8%"}, {l:"18%", t:"18%"}
+  ];
+  spots.forEach((s, i) => {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "balloon";
-    b.style.left = (6 + i * 15 + (i%2)*3) + "%";
-    b.style.top = (8 + (i%3)*10) + "%";
+    b.style.left = s.l;
+    b.style.top = s.t;
     b.style.animationDelay = (i * 0.35) + "s";
     b.style.animationDuration = (3.8 + (i%3)*0.5) + "s";
     const col = colors[i % colors.length];
@@ -657,7 +666,7 @@ const CONFIG = {
       setTimeout(() => b.remove(), 480);
     });
     layer.appendChild(b);
-  }
+  });
 
   // Intro
   const intro = $("intro");
@@ -666,7 +675,12 @@ const CONFIG = {
     ensureAudio();
     intro.classList.add("opening");
     playSiren();
-    setTimeout(() => intro.classList.add("open"), reduce ? 50 : 1400);
+    setTimeout(() => {
+      intro.classList.add("open");
+      intro.setAttribute("aria-hidden", "true");
+      // remove from flow so no translucent ghost can paint over cards
+      intro.style.display = "none";
+    }, reduce ? 50 : 1500);
   }
   if (!C.showIntro) {
     intro.classList.add("open");
