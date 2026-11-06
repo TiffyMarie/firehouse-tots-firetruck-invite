@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1B2A4A">
+<meta name="description" content="You're invited — firefighter birthday party">
+<title>You're Invited · Firehouse Tots</title>
+<style>
+:root{
+  --cream:#FFF8E7; --cream-deep:#F5ECD6; --navy:#1B2A4A; --navy-soft:#2A3B5C;
+  --red:#D7263D; --red-deep:#B01E31; --ink:#1B2A4A; --muted:#5A6478;
+  --card:#FFFFFF; --line:#E4D9C0; --shadow:0 10px 30px rgba(27,42,74,.12);
+  --radius:18px; --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.45}
+button,input,select,textarea{font:inherit}
+a{color:var(--red);font-weight:600}
+.wrap{max-width:440px;margin:0 auto;padding:0 18px 40px;position:relative}
+
+/* —— Intro / bay door —— */
+#intro{
+  position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;
+  background:var(--navy);color:#fff;cursor:pointer;overflow:hidden;
+  transition:opacity .55s ease,visibility .55s;
+}
+#intro.open{opacity:0;visibility:hidden;pointer-events:none}
+#intro .bay{
+  width:min(88vw,360px);aspect-ratio:3/4;position:relative;
+  border:3px solid rgba(255,248,231,.25);border-radius:12px;overflow:hidden;
+  background:linear-gradient(180deg,#0f182c,#1B2A4A 40%,#243656);
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+#intro .door{
+  position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr;
+  transition:transform .9s cubic-bezier(.55,.05,.25,1);
+}
+#intro.open .door{transform:translateY(-102%)}
+#intro .panel{
+  background:linear-gradient(90deg,#c21f34,#D7263D 40%,#e03a4f 55%,#B01E31);
+  border-bottom:2px solid rgba(0,0,0,.2);position:relative;
+}
+#intro .panel:last-child{border-bottom:0;border-top:2px solid rgba(255,255,255,.08)}
+#intro .panel::before{
+  content:"";position:absolute;left:12%;right:12%;top:18%;bottom:18%;
+  border:2px solid rgba(255,248,231,.22);border-radius:4px;
+}
+#intro .seal{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;z-index:2;padding:24px;text-align:center;pointer-events:none;
+  transition:opacity .35s ease .15s;
+}
+#intro.open .seal{opacity:0}
+#intro .badge{
+  width:72px;height:72px;border-radius:50%;background:var(--cream);color:var(--red);
+  display:grid;place-items:center;font-weight:800;letter-spacing:.04em;font-size:11px;
+  border:3px solid var(--navy);box-shadow:0 4px 0 rgba(0,0,0,.15);
+}
+#intro h1{margin:0;font-size:clamp(22px,5.5vw,28px);font-weight:800;letter-spacing:.02em}
+#intro p{margin:0;opacity:.85;font-size:14px}
+#intro .tap{
+  margin-top:8px;display:inline-flex;align-items:center;gap:8px;
+  padding:10px 16px;border-radius:999px;background:rgba(255,248,231,.12);
+  border:1px solid rgba(255,248,231,.28);font-size:13px;font-weight:600;
+  animation:pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+#intro .station-mark{
+  position:absolute;left:50%;bottom:18%;transform:translateX(-50%);
+  width:54%;height:6px;background:rgba(255,248,231,.2);border-radius:3px;z-index:1;
+}
+
+/* —— Main —— */
+header.hero{
+  padding:36px 0 8px;text-align:center;
+}
+.brand-pill{
+  display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--red);
+  font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:999px;padding:6px 14px;border:1.5px solid var(--line);margin-bottom:18px;
+}
+.brand-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.eyebrow{color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
+.hero h2{margin:0;font-size:clamp(32px,9vw,42px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.hero h2 .age{color:var(--red)}
+.hero .tagline{margin:12px 0 0;color:var(--muted);font-size:16px}
+
+.truck{
+  margin:22px auto 8px;width:min(100%,280px);height:auto;display:block;
+}
+
+.card{
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;margin:14px 0;box-shadow:var(--shadow);
+}
+.card h3{
+  margin:0 0 12px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;
+}
+.meta{display:grid;gap:12px}
+.meta-row{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.icon{
+  width:40px;height:40px;border-radius:12px;background:var(--cream-deep);
+  display:grid;place-items:center;color:var(--red);flex:none;
+}
+.meta-row strong{display:block;font-size:15px;font-weight:700}
+.meta-row span{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+.map-link{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:14px;
+  text-decoration:none;color:var(--red);font-weight:700;
+}
+.map-link:hover{text-decoration:underline}
+
+.countdown{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;
+}
+.countdown div{
+  background:var(--navy);color:#fff;border-radius:14px;padding:12px 4px 10px;
+}
+.countdown b{display:block;font-size:clamp(22px,6vw,28px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.countdown small{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:2px}
+.countdown.done{display:block;text-align:center;background:var(--navy);color:#fff;border-radius:14px;padding:16px;font-weight:700}
+
+.details p{margin:0 0 10px;font-size:15px}
+.details p:last-child{margin-bottom:0}
+.details .label{font-weight:700;color:var(--navy)}
+
+.actions{display:grid;gap:10px;margin-top:4px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;padding:12px 18px;border-radius:14px;border:0;cursor:pointer;
+  font-weight:700;font-size:15px;text-decoration:none;text-align:center;
+  transition:transform .15s ease,background .15s ease;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-deep)}
+.btn-secondary{background:var(--navy);color:#fff}
+.btn-secondary:hover{background:var(--navy-soft)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+form.rsvp{display:grid;gap:12px}
+label.field{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--navy)}
+input,select,textarea{
+  width:100%;min-height:46px;padding:11px 12px;border:1.5px solid var(--line);
+  border-radius:12px;background:#fff;color:var(--ink);font-size:16px;
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+textarea{min-height:88px;resize:vertical}
+.radio-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.radio{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-height:46px;border:1.5px solid var(--line);border-radius:12px;
+  font-weight:700;font-size:14px;cursor:pointer;background:#fff;
+}
+.radio input{position:absolute;opacity:0;pointer-events:none}
+.radio:has(input:checked){border-color:var(--navy);background:var(--cream-deep);box-shadow:inset 0 0 0 1px var(--navy)}
+.note{font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:500}
+.thanks{
+  display:none;text-align:center;padding:18px 8px;background:var(--cream-deep);
+  border-radius:14px;border:1.5px dashed var(--line);
+}
+.thanks.show{display:block}
+.thanks strong{display:block;font-size:17px;margin-bottom:4px}
+
+footer{
+  text-align:center;padding:28px 8px calc(20px + var(--safe-b));
+  color:var(--muted);font-size:12px;
+}
+footer b{color:var(--red)}
+footer a{color:var(--muted);text-decoration:none;font-weight:600}
+footer a:hover{color:var(--red)}
+
+@media (prefers-reduced-motion:reduce){
+  #intro .door,#intro,#intro .seal,.btn{transition:none!important}
+  #intro .tap{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!--
+  ============================================================
+  FIREHOUSE TOTS · Fire Truck Birthday Invite — DEMO
+  Edit the CONFIG object below (or pass URL params) to customize.
+  ============================================================
+-->
+<script>
+/* ========== EDIT THIS CONFIG ========== */
+const CONFIG = {
+  // Child
+  childName: "Liam",
+  age: 4,
+
+  // Party
+  headline: null,                 // auto: "{Name} is turning {age}" if null
+  tagline: "Join us for a fire truck birthday celebration",
+  dateISO: "2026-12-12",          // YYYY-MM-DD
+  startTime: "14:00",             // 24h local
+  endTime: "16:30",
+  timezone: "America/Los_Angeles",
+  dateLabel: "Saturday, December 12, 2026",
+  timeLabel: "2:00 – 4:30 PM",
+
+  // Location
+  venueName: "Riverside Fire Museum Lawn",
+  address: "123 Engine House Lane, Riverside, CA 92501",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=123+Engine+House+Lane,+Riverside,+CA+92501",
+
+  // Details
+  wearNote: "Red, navy, or firefighter costumes welcome — not required.",
+  giftsNote: "Your presence is the present. If you'd like to bring something, books or outdoor toys are favorites.",
+  hostNote: "Hosted by the Rivera family · Questions? Reply when you RSVP.",
+
+  // RSVP — no backend on this demo.
+  // mode: "mailto" | "sms" | "googleForm"
+  rsvpMode: "mailto",
+  rsvpEmail: "host@example.com",       // used when mode = mailto
+  rsvpPhone: "",                       // used when mode = sms  (E.164 or digits)
+  googleFormUrl: "",                   // used when mode = googleForm (full form URL)
+  rsvpDeadline: "December 5, 2026",
+
+  // Branding
+  brandName: "Firehouse Tots",
+  shopUrl: "https://www.etsy.com/shop/FirehouseTots",
+  showIntro: true
+};
+/* ========== END CONFIG ========== */
+
+// Optional URL overrides, e.g. ?name=Maya&age=5&date=2026-11-20&time=15:00&venue=City+Park
+(function applyParams(){
+  const p = new URLSearchParams(location.search);
+  const map = {
+    name:"childName", age:"age", headline:"headline", tagline:"tagline",
+    date:"dateISO", start:"startTime", end:"endTime", tz:"timezone",
+    dateLabel:"dateLabel", timeLabel:"timeLabel",
+    venue:"venueName", address:"address", maps:"mapsUrl",
+    wear:"wearNote", gifts:"giftsNote", host:"hostNote",
+    rsvpMode:"rsvpMode", email:"rsvpEmail", phone:"rsvpPhone", form:"googleFormUrl",
+    deadline:"rsvpDeadline", brand:"brandName", intro:"showIntro"
+  };
+  for (const [k, key] of Object.entries(map)){
+    if (!p.has(k)) continue;
+    let v = p.get(k);
+    if (key === "age") v = Number(v) || CONFIG.age;
+    if (key === "showIntro") v = !/^(0|false|no)$/i.test(v);
+    CONFIG[key] = v;
+  }
+})();
+</script>
+
+<!-- Intro: station bay door -->
+<div id="intro" role="button" tabindex="0" aria-label="Open invitation">
+  <div class="bay" aria-hidden="true">
+    <div class="door">
+      <div class="panel"></div>
+      <div class="panel"></div>
+    </div>
+    <div class="station-mark"></div>
+    <div class="seal">
+      <div class="badge">STATION<br>01</div>
+      <h1>You're Invited</h1>
+      <p>A birthday dispatch is waiting</p>
+      <div class="tap">Tap to open</div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" id="invite">
+  <header class="hero">
+    <div class="brand-pill"><span class="dot"></span><span id="brand">Firehouse Tots</span></div>
+    <p class="eyebrow">Birthday Invitation</p>
+    <h2 id="headline">Liam is turning <span class="age">4</span></h2>
+    <p class="tagline" id="tagline">Join us for a fire truck birthday celebration</p>
+
+    <!-- Minimal geometric truck (inline SVG, not cartoonish) -->
+    <svg class="truck" viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fire engine">
+      <rect x="18" y="48" width="180" height="42" rx="4" fill="#D7263D"/>
+      <rect x="18" y="38" width="70" height="14" rx="2" fill="#B01E31"/>
+      <rect x="198" y="42" width="64" height="48" rx="4" fill="#1B2A4A"/>
+      <rect x="210" y="50" width="28" height="18" rx="2" fill="#FFF8E7" opacity=".9"/>
+      <rect x="40" y="56" width="22" height="26" rx="2" fill="#FFF8E7" opacity=".85"/>
+      <rect x="72" y="56" width="22" height="26" rx="2" fill="#FFF8E7" opacity=".85"/>
+      <rect x="104" y="56" width="22" height="26" rx="2" fill="#FFF8E7" opacity=".85"/>
+      <rect x="148" y="52" width="10" height="34" fill="#FFC93C"/>
+      <circle cx="70" cy="96" r="14" fill="#1B2A4A"/>
+      <circle cx="70" cy="96" r="6" fill="#FFF8E7"/>
+      <circle cx="210" cy="96" r="14" fill="#1B2A4A"/>
+      <circle cx="210" cy="96" r="6" fill="#FFF8E7"/>
+      <rect x="16" y="66" width="10" height="8" rx="1" fill="#FFC93C"/>
+      <rect x="250" y="66" width="12" height="6" rx="1" fill="#FFC93C"/>
+    </svg>
+  </header>
+
+  <section class="card" aria-label="When and where">
+    <h3>When &amp; Where</h3>
+    <div class="meta">
+      <div class="meta-row">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        </div>
+        <div>
+          <strong id="dateLabel">Saturday, December 12, 2026</strong>
+          <span id="timeLabel">2:00 – 4:30 PM</span>
+        </div>
+      </div>
+      <div class="meta-row">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </div>
+        <div>
+          <strong id="venueName">Riverside Fire Museum Lawn</strong>
+          <span id="address">123 Engine House Lane, Riverside, CA 92501</span>
+          <a class="map-link" id="mapsLink" href="#" target="_blank" rel="noopener">Open in Google Maps →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Countdown">
+    <h3>Countdown</h3>
+    <div class="countdown" id="countdown" aria-live="polite">
+      <div><b id="cd-d">00</b><small>Days</small></div>
+      <div><b id="cd-h">00</b><small>Hours</small></div>
+      <div><b id="cd-m">00</b><small>Mins</small></div>
+      <div><b id="cd-s">00</b><small>Secs</small></div>
+    </div>
+  </section>
+
+  <section class="card details" aria-label="Party details">
+    <h3>Party Details</h3>
+    <p><span class="label">What to wear — </span><span id="wearNote"></span></p>
+    <p><span class="label">Gifts — </span><span id="giftsNote"></span></p>
+    <p id="hostNote"></p>
+  </section>
+
+  <section class="card" aria-label="Add to calendar">
+    <h3>Add to Calendar</h3>
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" id="icsBtn">Download .ics</button>
+      <a class="btn btn-ghost" id="gcalBtn" href="#" target="_blank" rel="noopener">Google Calendar</a>
+    </div>
+  </section>
+
+  <section class="card" aria-label="RSVP">
+    <h3>RSVP</h3>
+    <p class="note" id="rsvpHint" style="margin-bottom:12px"></p>
+    <form class="rsvp" id="rsvpForm">
+      <label class="field">Your name
+        <input name="name" required autocomplete="name" placeholder="Full name">
+      </label>
+      <label class="field">Number attending
+        <input name="guests" type="number" min="1" max="20" value="2" required>
+      </label>
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--navy)">Will you make it?</div>
+        <div class="radio-row">
+          <label class="radio"><input type="radio" name="status" value="Yes" checked> Yes</label>
+          <label class="radio"><input type="radio" name="status" value="Maybe"> Maybe</label>
+          <label class="radio"><input type="radio" name="status" value="No"> No</label>
+        </div>
+      </div>
+      <label class="field">Note (optional)
+        <textarea name="note" placeholder="Allergies, questions, or a hello"></textarea>
+      </label>
+      <button type="submit" class="btn btn-primary" id="rsvpSubmit">Send RSVP</button>
+      <p class="note" id="rsvpModeNote"></p>
+    </form>
+    <div class="thanks" id="thanks" role="status">
+      <strong>Thank you!</strong>
+      <span>Your RSVP is ready to send. If nothing opened, check your email or messages app.</span>
+    </div>
+  </section>
+
+  <footer>
+    Made with care by <b id="footerBrand">Firehouse Tots</b>
+    · <a id="shopLink" href="#" target="_blank" rel="noopener">Etsy shop</a>
+  </footer>
+</main>
+
+<script>
+(function () {
+  const C = CONFIG;
+  const $ = (id) => document.getElementById(id);
+
+  // Fill content
+  const headline = C.headline || (C.childName + " is turning ");
+  $("brand").textContent = C.brandName;
+  $("footerBrand").textContent = C.brandName;
+  $("shopLink").href = C.shopUrl || "#";
+  if (C.headline) {
+    $("headline").textContent = C.headline;
+  } else {
+    $("headline").innerHTML = escapeHtml(C.childName) + " is turning <span class=\"age\">" + escapeHtml(String(C.age)) + "</span>";
+  }
+  document.title = (C.childName ? C.childName + " · " : "") + "Birthday Invitation";
+  $("tagline").textContent = C.tagline || "";
+  $("dateLabel").textContent = C.dateLabel || C.dateISO;
+  $("timeLabel").textContent = C.timeLabel || (C.startTime + (C.endTime ? " – " + C.endTime : ""));
+  $("venueName").textContent = C.venueName || "";
+  $("address").textContent = C.address || "";
+  $("mapsLink").href = C.mapsUrl || ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(C.address || C.venueName || ""));
+  $("wearNote").textContent = C.wearNote || "";
+  $("giftsNote").textContent = C.giftsNote || "";
+  $("hostNote").textContent = C.hostNote || "";
+  $("rsvpHint").textContent = C.rsvpDeadline ? ("Please reply by " + C.rsvpDeadline + ".") : "Let us know if you can come.";
+
+  const mode = (C.rsvpMode || "mailto").toLowerCase();
+  const modeNotes = {
+    mailto: "Demo RSVP opens your email app (mailto). Buyers set rsvpEmail in CONFIG.",
+    sms: "Demo RSVP opens your messages app (sms). Buyers set rsvpPhone in CONFIG.",
+    googleform: "Demo RSVP opens a Google Form. Buyers paste googleFormUrl in CONFIG."
+  };
+  $("rsvpModeNote").textContent = modeNotes[mode] || modeNotes.mailto;
+
+  // Intro
+  const intro = $("intro");
+  if (!C.showIntro) {
+    intro.classList.add("open");
+    intro.style.display = "none";
+  } else {
+    const open = () => intro.classList.add("open");
+    intro.addEventListener("click", open);
+    intro.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  }
+
+  // Countdown to start
+  function partyStart() {
+    // Interpret date+time in local browser; label already carries timezone meaning for guests
+    const [y, m, d] = (C.dateISO || "").split("-").map(Number);
+    const [hh, mm] = (C.startTime || "12:00").split(":").map(Number);
+    if (!y) return null;
+    return new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0, 0);
+  }
+  function tick() {
+    const start = partyStart();
+    const box = $("countdown");
+    if (!start) { box.textContent = ""; return; }
+    const diff = start - Date.now();
+    if (diff <= 0) {
+      box.className = "countdown done";
+      box.textContent = "It's party time — see you there!";
+      return;
+    }
+    const s = Math.floor(diff / 1000);
+    const days = Math.floor(s / 86400);
+    const hours = Math.floor((s % 86400) / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    const pad = (n) => String(n).padStart(2, "0");
+    $("cd-d").textContent = pad(days);
+    $("cd-h").textContent = pad(hours);
+    $("cd-m").textContent = pad(mins);
+    $("cd-s").textContent = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Calendar helpers
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function toUTCStamp(date){
+    return date.getUTCFullYear() + pad2(date.getUTCMonth()+1) + pad2(date.getUTCDate()) + "T" +
+      pad2(date.getUTCHours()) + pad2(date.getUTCMinutes()) + pad2(date.getUTCSeconds()) + "Z";
+  }
+  function partyEnd(){
+    const [y, m, d] = (C.dateISO || "").split("-").map(Number);
+    const [hh, mm] = (C.endTime || C.startTime || "15:00").split(":").map(Number);
+    return new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0, 0);
+  }
+  function eventTitle(){
+    return (C.childName || "Birthday") + "'s Fire Truck Party" + (C.age ? " (turning " + C.age + ")" : "");
+  }
+  function eventDetails(){
+    return [C.tagline, C.wearNote, C.giftsNote, C.hostNote].filter(Boolean).join("\\n");
+  }
+  $("icsBtn").addEventListener("click", () => {
+    const st = partyStart(), en = partyEnd();
+    if (!st) return;
+    const ics = [
+      "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Firehouse Tots//Birthday Invite//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      "UID:" + (C.dateISO || "party") + "-" + (C.childName || "bday").toLowerCase().replace(/\s+/g,"") + "@firehousetots",
+      "DTSTAMP:" + toUTCStamp(new Date()),
+      "DTSTART:" + toUTCStamp(st),
+      "DTEND:" + toUTCStamp(en),
+      "SUMMARY:" + icsEsc(eventTitle()),
+      "DESCRIPTION:" + icsEsc([C.tagline, C.wearNote, C.giftsNote, C.hostNote].filter(Boolean).join("\n")),
+      "LOCATION:" + icsEsc([C.venueName, C.address].filter(Boolean).join(", ")),
+      "END:VEVENT","END:VCALENDAR"
+    ].join("\r\n");
+    const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = (C.childName || "birthday").toLowerCase().replace(/\s+/g,"-") + "-party.ics";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  });
+  (function setGCal(){
+    const st = partyStart(), en = partyEnd();
+    if (!st) return;
+    const fmt = (d) => d.getUTCFullYear() + pad2(d.getUTCMonth()+1) + pad2(d.getUTCDate()) + "T" + pad2(d.getUTCHours()) + pad2(d.getUTCMinutes()) + pad2(d.getUTCSeconds()) + "Z";
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+      + "&text=" + encodeURIComponent(eventTitle())
+      + "&dates=" + fmt(st) + "/" + fmt(en)
+      + "&details=" + encodeURIComponent([C.tagline, C.wearNote, C.giftsNote, C.hostNote].filter(Boolean).join("\n"))
+      + "&location=" + encodeURIComponent([C.venueName, C.address].filter(Boolean).join(", "));
+    $("gcalBtn").href = url;
+  })();
+
+  function icsEsc(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n"); }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+  // RSVP
+  $("rsvpForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const name = (fd.get("name") || "").toString().trim();
+    const guests = fd.get("guests");
+    const status = fd.get("status");
+    const note = (fd.get("note") || "").toString().trim();
+    const subject = "RSVP: " + (C.childName || "Birthday") + " party — " + status + " (" + name + ")";
+    const body = [
+      "RSVP for " + (C.childName || "the") + "'s birthday",
+      "Name: " + name,
+      "Attending: " + status,
+      "Guests: " + guests,
+      note ? ("Note: " + note) : "",
+      "",
+      "Party: " + (C.dateLabel || C.dateISO) + " · " + (C.timeLabel || ""),
+      (C.venueName || "") + (C.address ? " — " + C.address : "")
+    ].filter((x,i,a)=>x!==""||(a[i-1]!=="")).join("\n");
+
+    if (mode === "googleform" && C.googleFormUrl) {
+      window.open(C.googleFormUrl, "_blank", "noopener");
+    } else if (mode === "sms" && C.rsvpPhone) {
+      const phone = String(C.rsvpPhone).replace(/[^\d+]/g,"");
+      window.location.href = "sms:" + phone + "?&body=" + encodeURIComponent(body);
+    } else if (C.rsvpEmail) {
+      window.location.href = "mailto:" + encodeURIComponent(C.rsvpEmail)
+        + "?subject=" + encodeURIComponent(subject)
+        + "&body=" + encodeURIComponent(body);
+    } else {
+      alert("Set rsvpEmail, rsvpPhone, or googleFormUrl in CONFIG to enable RSVP.");
+      return;
+    }
+    $("thanks").classList.add("show");
+  });
+})();
+</script>
+</body>
+</html>
